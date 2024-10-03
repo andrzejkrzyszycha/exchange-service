@@ -3,7 +3,9 @@ package com.example.exchange.service;
 import com.example.exchange.model.Account;
 import com.example.exchange.model.Balance;
 import com.example.exchange.model.Currency;
+import com.example.exchange.model.User;
 import com.example.exchange.repository.AccountRepository;
+import com.example.exchange.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.json.JSONObject;
@@ -21,15 +23,18 @@ import java.util.List;
 public class AccountService {
 
     private final AccountRepository accountRepository;
+    private final UserRepository userRepository;
     private final RestTemplate restTemplate;
 
     private static final String NBP_API_URL = "http://api.nbp.pl/api/exchangerates/rates/a/";
 
     @Transactional
-    public Account createAccount(String name, BigDecimal initialBalancePln) {
+    public Account createAccount(Long userId, BigDecimal initialBalancePln) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
         Account account = new Account();
-        account.setName(name);
+        account.setUser(user);
         account.setBalances(List.of(Balance.builder()
                         .balance(initialBalancePln)
                         .currency(com.example.exchange.model.Currency.PLN)

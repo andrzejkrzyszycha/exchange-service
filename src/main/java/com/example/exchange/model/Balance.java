@@ -5,15 +5,16 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "balance")
+@Table(name = "balances")
 @Getter
 @Setter
 @Builder
-public class Balance {
+public class Balance implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
