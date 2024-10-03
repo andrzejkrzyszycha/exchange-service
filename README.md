@@ -17,3 +17,12 @@ Założenia niefunkcjonalne:
 6. W przypadku niesprecyzowania czegoś w zadaniu - pozostaje dowolność.
 7. W przypadku pytań – można się dopytywać mailowo.
 Oprócz spełnienia wymagań funkcjonalnych oceniany będzie również styl rozwiązania 😊
+
+Prerequisites:
+
+1. docker
+
+Urushomienie:
+
+1. docker-compose up
+2. mvn spring-boot:run

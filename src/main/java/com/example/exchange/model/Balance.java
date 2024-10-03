@@ -1,16 +1,18 @@
 package com.example.exchange.model;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.Currency;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "balance")
 @Getter
 @Setter
+@Builder
 public class Balance {
 
     @Id
@@ -23,4 +25,7 @@ public class Balance {
 
     @Column(name = "currency")
     Currency currency;
+
+    @Column(name = "exchange_date")
+    LocalDate exchangeDate;
 }
