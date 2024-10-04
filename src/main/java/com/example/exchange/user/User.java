@@ -1,4 +1,4 @@
-package com.example.exchange.model;
+package com.example.exchange.user;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -20,7 +20,7 @@ public class User implements Serializable {
     @Column(name = "first_name")
     String firstName;
 
-    @Column(name = "surname")
-    String surname;
+    @Column(name = "last_name")
+    String lastName;
 
 }

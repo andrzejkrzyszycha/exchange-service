@@ -1,11 +1,9 @@
-package com.example.exchange.service;
+package com.example.exchange.account;
 
-import com.example.exchange.model.Account;
-import com.example.exchange.model.Balance;
-import com.example.exchange.model.Currency;
-import com.example.exchange.model.User;
-import com.example.exchange.repository.AccountRepository;
-import com.example.exchange.repository.UserRepository;
+import com.example.exchange.currency.CurrencyUtil;
+import com.example.exchange.currency.Currency;
+import com.example.exchange.user.User;
+import com.example.exchange.user.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.json.JSONObject;
@@ -15,8 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.LocalDate;
-import java.util.List;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Service
@@ -29,37 +26,36 @@ public class AccountService {
     private static final String NBP_API_URL = "http://api.nbp.pl/api/exchangerates/rates/a/";
 
     @Transactional
-    public Account createAccount(Long userId, BigDecimal initialBalancePln) {
+    public Account createAccount(Long userId, BigDecimal initialBalance, String initialCurrency) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-
+        if (initialBalance.compareTo(BigDecimal.ZERO) < 0) {
+            throw new RuntimeException("Wrong value of initial balance");
+        }
+        Currency currency = CurrencyUtil.CURRENCY_MAP.get(initialCurrency); // This might be stored in database
+        if (currency == null) {
+            throw new RuntimeException("Wrong currency code");
+        }
         Account account = new Account();
         account.setUser(user);
-        account.setBalances(List.of(Balance.builder()
-                        .amount(initialBalancePln)
-                        .currency(com.example.exchange.model.Currency.PLN)
-                        .exchangeDate(LocalDate.now())
-                .build()));
+        account.setCurrency(currency);
+        account.setAmount(initialBalance);
         return account;
     }
 
-    @Transactional
-    public Account exchange(Long accountId, Currency sourceCurrency, BigDecimal amount, Currency destinationCurrency) {
+    public ExchangeDataDto exchange(Long accountId, Currency destinationCurrency) {
         Account account = getAccount(accountId);
-
+        // Additional validation for existing of currency
         BigDecimal rate = getExchangeRate(destinationCurrency);
-        BigDecimal destinationAmount = amount.divide(rate, 2, RoundingMode.HALF_UP);
+        BigDecimal destinationAmount = account.getAmount().divide(rate, 2, RoundingMode.HALF_UP);
 
-        account.setBalances(List.of(Balance.builder()
-                        .amount(amount)
-                        .currency(sourceCurrency)
-                        .exchangeDate(LocalDate.now()).build(),
-                Balance.builder()
-                        .amount(destinationAmount)
-                        .exchangeDate(LocalDate.now())
-                        .currency(destinationCurrency)
-                        .build()));
-        return account;
+        return ExchangeDataDto.builder()
+                .accountDto(AccountMapper.toDto(account))
+                .destinationCurrency(destinationCurrency)
+                .destinationAmount(destinationAmount)
+                .exchangeRate(rate)
+                .exchangeDate(LocalDateTime.now())
+                .build();
     }
 
     public Account getAccount(Long accountId) {

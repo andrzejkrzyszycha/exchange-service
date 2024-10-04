@@ -1,6 +1,5 @@
-package com.example.exchange.repository;
+package com.example.exchange.account;
 
-import com.example.exchange.model.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package com.example.exchange.model;
+package com.example.exchange.currency;
 
 public enum Currency {
     PLN("985"),
