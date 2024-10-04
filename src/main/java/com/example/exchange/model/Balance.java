@@ -21,8 +21,8 @@ public class Balance implements Serializable {
     @Column(name = "balance_id", nullable = false)
     private Long balanceId;
 
-    @Column(name = "balance")
-    BigDecimal balance;
+    @Column(name = "amount")
+    BigDecimal amount;
 
     @Column(name = "currency")
     Currency currency;

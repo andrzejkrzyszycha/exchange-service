@@ -6,7 +6,7 @@ CREATE TABLE accounts (
 
 CREATE TABLE balances (
     balance_id bigint PRIMARY KEY NOT NULL,
-    balance DECIMAL NOT NULL,
+    amount DECIMAL NOT NULL,
     currency VARCHAR(255),
     exchange_date DATE
 );

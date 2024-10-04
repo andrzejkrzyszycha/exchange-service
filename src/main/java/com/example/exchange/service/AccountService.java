@@ -36,7 +36,7 @@ public class AccountService {
         Account account = new Account();
         account.setUser(user);
         account.setBalances(List.of(Balance.builder()
-                        .balance(initialBalancePln)
+                        .amount(initialBalancePln)
                         .currency(com.example.exchange.model.Currency.PLN)
                         .exchangeDate(LocalDate.now())
                 .build()));
@@ -51,11 +51,11 @@ public class AccountService {
         BigDecimal destinationAmount = amount.divide(rate, 2, RoundingMode.HALF_UP);
 
         account.setBalances(List.of(Balance.builder()
-                        .balance(amount)
+                        .amount(amount)
                         .currency(sourceCurrency)
                         .exchangeDate(LocalDate.now()).build(),
                 Balance.builder()
-                        .balance(destinationAmount)
+                        .amount(destinationAmount)
                         .exchangeDate(LocalDate.now())
                         .currency(destinationCurrency)
                         .build()));
