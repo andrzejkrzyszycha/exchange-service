@@ -40,9 +40,11 @@ public class AccountService {
         account.setUser(user);
         account.setCurrency(currency);
         account.setAmount(initialBalance);
-        return account;
+        return accountRepository.save(account);
     }
 
+    // I don't see reason to persist those data.
+    // Data will be retried on the fly because the rate may be different each time we ask it
     public ExchangeDataDto exchange(Long accountId, Currency destinationCurrency) {
         Account account = getAccount(accountId);
         // Additional validation for existing of currency

@@ -13,16 +13,16 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/create")
-    public ResponseEntity<User> createAccount(@RequestParam String firstName,
-                                              @RequestParam String lastName) {
+    public ResponseEntity<UserDto> createAccount(@RequestParam String firstName,
+                                                 @RequestParam String lastName) {
         User user = userService.createUser(firstName, lastName);
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+        return new ResponseEntity<>(UserMapper.toDto(user), HttpStatus.CREATED);
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<User> getUser(@PathVariable Long userId) {
+    public ResponseEntity<UserDto> getUser(@PathVariable Long userId) {
         User user = userService.getUser(userId);
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(UserMapper.toDto(user));
     }
 
 }

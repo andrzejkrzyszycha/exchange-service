@@ -16,7 +16,7 @@ public class UserService {
         User user = new User();
         user.setFirstName(firstName);
         user.setLastName(lastName);
-        return user;
+        return userRepository.save(user);
     }
 
     public User getUser(Long userId) {
