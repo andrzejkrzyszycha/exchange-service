@@ -32,7 +32,7 @@ public class AccountService {
         if (initialBalance.compareTo(BigDecimal.ZERO) < 0) {
             throw new RuntimeException("Wrong value of initial balance");
         }
-        Currency currency = CurrencyUtil.CURRENCY_MAP.get(initialCurrency); // This might be stored in database
+        Currency currency = CurrencyUtil.CURRENCY_MAP.get(initialCurrency); // This should be stored in database
         if (currency == null) {
             throw new RuntimeException("Wrong currency code");
         }
