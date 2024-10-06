@@ -26,3 +26,13 @@ Urushomienie:
 
 1. docker-compose up
 2. mvn spring-boot:run
+
+
+# Komentarz: 
+
+Wykonałem to zadanie w jednym mikroserwisie ponieważ wymagania funkcjonalne są bardzo proste. 
+Natomiast wraz z rozwojem wymagań należy rozdzielić ten mikroserwis na 3 kolejne 
+wykorzystując EDD. 
+1. user-service
+2. account-service
+3. exchange-service - tutaj moze byc rowniez transaction-service 

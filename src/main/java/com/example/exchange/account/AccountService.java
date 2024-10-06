@@ -1,19 +1,14 @@
 package com.example.exchange.account;
 
-import com.example.exchange.currency.CurrencyUtil;
 import com.example.exchange.currency.Currency;
+import com.example.exchange.currency.CurrencyUtil;
 import com.example.exchange.user.User;
 import com.example.exchange.user.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.json.JSONObject;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Service
@@ -21,9 +16,6 @@ public class AccountService {
 
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;
-    private final RestTemplate restTemplate;
-
-    private static final String NBP_API_URL = "http://api.nbp.pl/api/exchangerates/rates/a/";
 
     @Transactional
     public Account createAccount(Long userId, BigDecimal initialBalance, String initialCurrency) {
@@ -43,32 +35,9 @@ public class AccountService {
         return accountRepository.save(account);
     }
 
-    // I don't see reason to persist those data.
-    // Data will be retried on the fly because the rate may be different each time we ask it
-    public ExchangeDataDto exchange(Long accountId, Currency destinationCurrency) {
-        Account account = getAccount(accountId);
-        // Additional validation for existing of currency
-        BigDecimal rate = getExchangeRate(destinationCurrency);
-        BigDecimal destinationAmount = account.getAmount().divide(rate, 2, RoundingMode.HALF_UP);
-
-        return ExchangeDataDto.builder()
-                .accountDto(AccountMapper.toDto(account))
-                .destinationCurrency(destinationCurrency)
-                .destinationAmount(destinationAmount)
-                .exchangeRate(rate)
-                .exchangeDate(LocalDateTime.now())
-                .build();
-    }
-
     public Account getAccount(Long accountId) {
         return accountRepository.findById(accountId)
                 .orElseThrow(() -> new RuntimeException("Account not found"));
-    }
-
-    public BigDecimal getExchangeRate(Currency currency) {
-        ResponseEntity<String> response = restTemplate.getForEntity(NBP_API_URL + currency + "/", String.class);
-        JSONObject jsonObject = new JSONObject(response.getBody());
-        return jsonObject.getJSONArray("rates").getJSONObject(0).getBigDecimal("mid");
     }
 
 }

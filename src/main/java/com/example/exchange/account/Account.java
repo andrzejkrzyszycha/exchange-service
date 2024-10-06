@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 @Setter
 public class Account implements Serializable {
 
+    // Usually account number is 12 characters later combined with branch and control number providing IBAN
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_generator")
     @SequenceGenerator(name = "account_generator", sequenceName = "account_seq", allocationSize = 1)
