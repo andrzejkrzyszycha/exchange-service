@@ -26,6 +26,7 @@ public class Account implements Serializable {
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "currency")
     private Currency currency;
 
