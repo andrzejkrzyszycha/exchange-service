@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/accounts")
+@RequestMapping("/v1/api/accounts")
 public class AccountController {
 
     private final AccountService accountService;

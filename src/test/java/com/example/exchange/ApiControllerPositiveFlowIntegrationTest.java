@@ -45,7 +45,7 @@ public class ApiControllerPositiveFlowIntegrationTest {
     @Test
     @Order(1)
     public void testCreateUser() throws Exception {
-        mockMvc.perform(post("/api/users/create")
+        mockMvc.perform(post("/v1/api/users/create")
                         .param("firstName", "Jan")
                         .param("lastName", "Kowalski"))
                 .andExpect(status().isCreated())
@@ -56,7 +56,7 @@ public class ApiControllerPositiveFlowIntegrationTest {
     @Test
     @Order(2)
     public void testGetUser() throws Exception {
-        mockMvc.perform(get("/api/users/1"))
+        mockMvc.perform(get("/v1/api/users/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstName").value("Jan"))
                 .andExpect(jsonPath("$.lastName").value("Kowalski"));
@@ -65,7 +65,7 @@ public class ApiControllerPositiveFlowIntegrationTest {
     @Test
     @Order(3)
     public void testCreateAccount() throws Exception {
-        mockMvc.perform(post("/api/accounts/create")
+        mockMvc.perform(post("/v1/api/accounts/create")
                         .param("userId", "1")
                         .param("initialBalance", "1000.00")
                         .param("currency", "PLN"))
@@ -82,7 +82,7 @@ public class ApiControllerPositiveFlowIntegrationTest {
     @Test
     @Order(4)
     public void testExchangeUSDtoPLN() throws Exception {
-        mockMvc.perform(post("/api/accounts/exchange")
+        mockMvc.perform(post("/v1/api/accounts/exchange")
                         .param("accountId", "1")
                         .param("destinationCurrency", "USD"))
                 .andExpect(status().isOk())
